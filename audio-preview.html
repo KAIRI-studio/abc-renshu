@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>録音音声をきく | ABCれんしゅう</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#edf6ff;color:#23344f;font-family:system-ui,-apple-system,sans-serif;line-height:1.7}main{max-width:640px;margin:auto;padding:28px 18px 40px}a{color:#244db6;text-underline-offset:3px}.brand{font-size:14px;font-weight:700;letter-spacing:.04em}h1{font-size:26px;line-height:1.4;margin:20px 0 12px}.intro{margin:0 0 22px}article,section{background:#fff;border:1px solid #d1e0ef;border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 4px 12px #24466a08}article h2{font-size:30px;line-height:1.2;margin:0 0 12px}h2 small{font-size:15px;font-weight:500;margin-left:10px}section h2{font-size:19px;margin:0 0 12px}audio{display:block;width:100%;min-height:54px}footer{font-size:13px;margin-top:25px;overflow-wrap:anywhere}footer p{margin:10px 0}.notice{font-size:14px;color:#4b5f78}a:focus-visible{outline:3px solid #edab27;outline-offset:4px}
+  </style>
+</head>
+<body><main>
+  <a class="brand" href="./">kairi_studio · ABCれんしゅう</a>
+  <h1>録音音声をきく</h1>
+  <p class="intro">男性の声優が読み上げたA〜Zの録音です。下の ▶ を押すと再生できます。</p>
+  <article><h2>A<small>エー</small></h2><audio aria-label="Aの録音" controls preload="auto" src="assets/audio-preview/A.mp3"></audio></article>
+  <article><h2>E<small>イー</small></h2><audio aria-label="Eの録音" controls preload="auto" src="assets/audio-preview/E.mp3"></audio></article>
+  <article><h2>W<small>ダブリュー</small></h2><audio aria-label="Wの録音" controls preload="auto" src="assets/audio-preview/W.mp3"></audio></article>
+  <section><h2>元の録音を通してきく</h2><audio aria-label="アルファベットの元の録音" controls preload="metadata" src="assets/audio-preview/original.mp3"></audio></section>
+  <p class="notice">このページは新しい音声の試聴用です。ゲームへの差し替えは試聴後に行います。</p>
+  <p id="error" role="status" hidden>音声を読み込めませんでした。ページを再読み込みするか、下の配布元から再生してください。</p>
+  <footer>
+    <p>録音：<a href="https://soundbible.com/2009-A-Z-Vocalized.html">“A-Z Vocalized” / Mike Koenig · SoundBible.com</a><br>ライセンス：<a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a></p>
+    <p>A・E・Wは元の録音から該当部分を切り出し、MP3に再変換しました。声の高さ・再生速度は変更していません。通し再生は配布元のMP3そのものです。</p>
+    <a href="./">ゲームにもどる</a>
+  </footer>
+</main><script>
+  const players = [...document.querySelectorAll('audio')];
+  for (const player of players) {
+    player.addEventListener('play', () => {
+      for (const other of players) if (other !== player) other.pause();
+    });
+    player.addEventListener('error', () => { document.getElementById('error').hidden = false; });
+  }
+  window.addEventListener('pagehide', () => { for (const player of players) player.pause(); });
+</script></body></html>
