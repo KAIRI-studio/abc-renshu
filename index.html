@@ -262,6 +262,7 @@
     const get = id => document.getElementById(id);
     const screens = ['home', 'learn', 'quiz', 'result'];
     let activeAudio = null;
+    const recordings = new Map();
     const prompt = document.querySelector('.prompt');
     let pool = alphabet.slice(0, 5);
     let letterIndex = 0;
@@ -292,12 +293,21 @@
       bar.value = index + 1;
     }
 
+    function getRecording(letter) {
+      if (!recordings.has(letter)) {
+        const recording = new Audio(`assets/audio/clean-${letter}.mp3`);
+        recording.preload = 'auto';
+        recordings.set(letter, recording);
+        recording.load();
+      }
+      return recordings.get(letter);
+    }
+
     function stopAudio() {
       speechRequest += 1;
       if (activeAudio) {
         activeAudio.pause();
-        activeAudio.removeAttribute('src');
-        activeAudio.load();
+        activeAudio.currentTime = 0;
         activeAudio = null;
       }
       get('audio-note').hidden = true;
@@ -330,6 +340,7 @@
     get('result-home').addEventListener('click', goHome);
     get('learn-start').addEventListener('click', () => {
       pool = selection();
+      for (const letter of pool) getRecording(letter.upper);
       letterIndex = 0;
       renderLetter();
       show('learn');
@@ -347,15 +358,17 @@
     get('speak').addEventListener('click', () => {
       stopAudio();
       const request = speechRequest;
-      const recording = new Audio(`assets/audio/${pool[letterIndex].upper}.mp3`);
+      const recording = getRecording(pool[letterIndex].upper);
+      if (recording.error) recording.load();
+      recording.currentTime = 0;
       activeAudio = recording;
       const failed = () => {
         if (request === speechRequest) showAudioNote();
       };
-      recording.addEventListener('error', failed, { once: true });
-      recording.addEventListener('ended', () => {
-        if (activeAudio === recording) activeAudio = null;
-      }, { once: true });
+      recording.onerror = failed;
+      recording.onended = () => {
+        if (request === speechRequest && activeAudio === recording) activeAudio = null;
+      };
       try {
         recording.play().catch(failed);
       } catch {
