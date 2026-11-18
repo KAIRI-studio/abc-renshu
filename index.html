@@ -19,6 +19,7 @@
     html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; touch-action: manipulation; -webkit-text-size-adjust: 100%; }
     .viewport { height: 100vh; height: 100svh; overflow: auto; overscroll-behavior: contain; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
     .frame { position: relative; margin-inline: auto; }
+    .viewport, .frame, .shell { touch-action: manipulation; }
     .shell { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
     .frame > .shell { position: absolute; top: 0; left: 0; margin: 0; transform-origin: top left; }
     img { -webkit-user-drag: none; pointer-events: none; }
@@ -576,6 +577,49 @@
 
     get('game').addEventListener('dragstart', event => event.preventDefault());
     get('game').addEventListener('dblclick', event => event.preventDefault());
+
+    // iOS may interpret a second touch as zoom before a dblclick is emitted.
+    // Apply this at document level, including the scroll container and margins.
+    let touchStart = null;
+    let lastTap = null;
+    document.addEventListener('touchstart', event => {
+      if (event.touches.length !== 1) {
+        touchStart = lastTap = null;
+        return;
+      }
+      const touch = event.touches[0];
+      touchStart = { x: touch.clientX, y: touch.clientY, at: performance.now() };
+    }, { passive: true, capture: true });
+    document.addEventListener('touchmove', event => {
+      if (!touchStart || event.touches.length !== 1 ||
+          Math.hypot(event.touches[0].clientX - touchStart.x, event.touches[0].clientY - touchStart.y) > 10) {
+        touchStart = lastTap = null;
+      }
+    }, { passive: true, capture: true });
+    document.addEventListener('touchcancel', () => {
+      touchStart = lastTap = null;
+    }, { passive: true, capture: true });
+    document.addEventListener('touchend', event => {
+      const start = touchStart;
+      touchStart = null;
+      if (!start || event.touches.length || event.changedTouches.length !== 1 ||
+          performance.now() - start.at > 500) {
+        lastTap = null;
+        return;
+      }
+      const touch = event.changedTouches[0];
+      if (Math.hypot(touch.clientX - start.x, touch.clientY - start.y) > 10) {
+        lastTap = null;
+        return;
+      }
+      const tap = { x: touch.clientX, y: touch.clientY, at: performance.now() };
+      if (lastTap && tap.at - lastTap.at <= 350 &&
+          Math.hypot(tap.x - lastTap.x, tap.y - lastTap.y) <= 40 && event.cancelable) {
+        event.preventDefault();
+      }
+      lastTap = tap;
+    }, { passive: false, capture: true });
+
     window.addEventListener('resize', scheduleFit);
     window.addEventListener('pageshow', scheduleFit);
     window.addEventListener('pagehide', stopAudio);
@@ -591,4 +635,5 @@
   </script>
 </body>
 </html>
+
 
