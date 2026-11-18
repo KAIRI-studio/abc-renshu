@@ -295,7 +295,7 @@
 
     function getRecording(letter) {
       if (!recordings.has(letter)) {
-        const recording = new Audio(`assets/audio/clean-${letter}.mp3`);
+        const recording = new Audio(`assets/audio/recorded-${letter}.mp3`);
         recording.preload = 'auto';
         recordings.set(letter, recording);
         recording.load();
