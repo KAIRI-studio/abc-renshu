@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="大文字・小文字・読み方を、カードと4択クイズで練習できる小学生向けのアルファベットゲーム。">
+  <meta name="description" content="おおもじ・こもじ・よみかたを、カードと4たくクイズで れんしゅうできる アルファベットゲーム。">
   <meta name="theme-color" content="#eaf7ff">
   <title>ABCれんしゅう | kairi_studio</title>
   <style>
@@ -166,7 +166,7 @@
     <main class="panel">
       <section id="home">
         <div class="hero">
-          <div><h1 tabindex="-1" aria-label="ABCれんしゅう"><b lang="en"><span>A</span><span>B</span><span>C</span></b>れんしゅう</h1><p class="intro">大文字・小文字・読み方をおぼえよう。</p></div>
+          <div><h1 tabindex="-1" aria-label="ABCれんしゅう"><b lang="en"><span>A</span><span>B</span><span>C</span></b>れんしゅう</h1><p class="intro">おおもじ・こもじ・よみかたをおぼえよう。</p></div>
           <div class="cast" aria-hidden="true">
             <i class="sparkle"></i><i class="sparkle"></i>
             <img draggable="false" class="nobunaga" src="assets/characters/nobunaga.webp" alt="" width="1254" height="1254">
@@ -176,52 +176,52 @@
         </div>
         <div class="inside">
           <fieldset>
-            <legend>れんしゅうする文字</legend>
+            <legend>れんしゅうする もじ</legend>
             <div class="ranges">
-              <label class="range"><input type="radio" name="range" value="0-5" checked><span><b>A〜E</b><small>5文字</small></span></label>
-              <label class="range"><input type="radio" name="range" value="5-10"><span><b>F〜J</b><small>5文字</small></span></label>
-              <label class="range"><input type="radio" name="range" value="10-15"><span><b>K〜O</b><small>5文字</small></span></label>
-              <label class="range"><input type="radio" name="range" value="15-20"><span><b>P〜T</b><small>5文字</small></span></label>
-              <label class="range"><input type="radio" name="range" value="20-26"><span><b>U〜Z</b><small>6文字</small></span></label>
-              <label class="range"><input type="radio" name="range" value="0-26"><span><b>ぜんぶ</b><small>26文字</small></span></label>
+              <label class="range"><input type="radio" name="range" value="0-5" checked><span><b>A〜E</b><small>5もじ</small></span></label>
+              <label class="range"><input type="radio" name="range" value="5-10"><span><b>F〜J</b><small>5もじ</small></span></label>
+              <label class="range"><input type="radio" name="range" value="10-15"><span><b>K〜O</b><small>5もじ</small></span></label>
+              <label class="range"><input type="radio" name="range" value="15-20"><span><b>P〜T</b><small>5もじ</small></span></label>
+              <label class="range"><input type="radio" name="range" value="20-26"><span><b>U〜Z</b><small>6もじ</small></span></label>
+              <label class="range"><input type="radio" name="range" value="0-26"><span><b>ぜんぶ</b><small>26もじ</small></span></label>
             </div>
           </fieldset>
           <div class="row">
-            <button id="learn-start" class="btn primary mode" type="button">おぼえる<small>文字カード</small></button>
-            <button id="quiz-start" class="btn mode" type="button">クイズ<small>4たく・10問</small></button>
+            <button id="learn-start" class="btn primary mode" type="button">おぼえる<small>もじカード</small></button>
+            <button id="quiz-start" class="btn mode" type="button">クイズ<small>4たく・10もん</small></button>
           </div>
         </div>
       </section>
       <section id="learn" class="inside" hidden>
         <div class="head"><h2 tabindex="-1">おぼえる</h2><span id="learn-count" class="progress-label"></span></div>
-        <progress id="learn-progress" aria-label="おぼえる進みぐあい"></progress>
+        <progress id="learn-progress" aria-label="おぼえる すすみぐあい"></progress>
         <div class="card" aria-live="polite" aria-atomic="true">
-          <div><small>大文字</small><strong id="upper" class="letter" lang="en"></strong></div>
-          <div><small>小文字</small><strong id="lower" class="letter" lang="en"></strong></div>
-          <p class="reading"><small>読み方</small><strong id="reading"></strong></p>
+          <div><small>おおもじ</small><strong id="upper" class="letter" lang="en"></strong></div>
+          <div><small>こもじ</small><strong id="lower" class="letter" lang="en"></strong></div>
+          <p class="reading"><small>よみかた</small><strong id="reading"></strong></p>
           <span class="character card-mascot" aria-hidden="true"><img draggable="false" id="learn-mascot" alt=""></span>
         </div>
-        <button id="speak" class="btn audio" type="button">読み方をきく</button>
+        <button id="speak" class="btn audio" type="button">よみかたをきく</button>
         <p id="audio-note" class="audio-note" role="status" hidden></p>
         <div class="row"><button id="prev" class="btn" type="button">← まえ</button><button id="learn-next" class="btn primary" type="button">つぎ →</button></div>
       </section>
       <section id="quiz" class="inside" hidden>
         <div class="head"><h2 id="quiz-title" tabindex="-1">クイズ</h2><span id="quiz-count" class="progress-label"></span></div>
-        <progress id="quiz-progress" aria-label="クイズの進みぐあい"></progress>
+        <progress id="quiz-progress" aria-label="クイズの すすみぐあい"></progress>
         <p class="prompt" tabindex="-1"><span id="question-instruction"></span><strong id="question-letter"></strong><span class="character quiz-mascot" aria-hidden="true"><img draggable="false" id="quiz-mascot" alt=""></span></p>
-        <div id="options" class="options" role="group" aria-label="こたえの選択肢"></div>
+        <div id="options" class="options" role="group" aria-label="こたえを えらぶ"></div>
         <p id="feedback" class="feedback" role="status"></p>
-        <button id="quiz-next" class="btn primary wide" type="button" disabled>つぎの問題 →</button>
+        <button id="quiz-next" class="btn primary wide" type="button" disabled>つぎの もんだい →</button>
       </section>
       <section id="result" class="inside" hidden>
         <div class="head"><h2 id="result-title" tabindex="-1">クイズのけっか</h2></div>
         <p class="score"><span><strong id="score"></strong><span id="score-total"></span></span><img draggable="false" class="score-mascot" src="assets/characters/hanzo-full.webp" alt="" width="1254" height="1254" loading="lazy"></p>
         <p id="result-note" class="result-note"></p>
-        <button id="retry" class="btn primary wide" type="button">まちがえた問題をふくしゅう</button>
+        <button id="retry" class="btn primary wide" type="button">まちがえた もんだいを やりなおす</button>
         <button id="result-home" class="btn wide" type="button">ホームにもどる</button>
       </section>
     </main>
-    <footer class="credits"><a href="audio-credits.html">音声の出典・利用条件</a></footer>
+    <footer class="credits"><a href="audio-credits.html">おとの せつめい</a></footer>
   </div>
   </div></div>
   <script>
@@ -238,9 +238,9 @@
       reading: readings[index]
     }));
     const questionTypes = [
-      { prompt: 'upper', answer: 'lower', instruction: '小文字をえらぼう' },
-      { prompt: 'lower', answer: 'upper', instruction: '大文字をえらぼう' },
-      { prompt: 'reading', answer: 'upper', instruction: 'この読み方の大文字をえらぼう' }
+      { prompt: 'upper', answer: 'lower', instruction: 'こもじをえらぼう' },
+      { prompt: 'lower', answer: 'upper', instruction: 'おおもじをえらぼう' },
+      { prompt: 'reading', answer: 'upper', instruction: 'このよみかたのおおもじをえらぼう' }
     ];
     const learnCharacters = [
       'assets/characters/devil.png',
@@ -391,7 +391,7 @@
     }
 
     function showAudioNote() {
-      get('audio-note').textContent = '音声を再生できませんでした。もう一度おしてね。';
+      get('audio-note').textContent = 'おとが でなかったよ。もういちど おしてね。';
       get('audio-note').hidden = false;
     }
 
@@ -515,7 +515,7 @@
       get('feedback').textContent = '';
       get('feedback').className = 'feedback';
       get('quiz-next').disabled = true;
-      get('quiz-next').textContent = questionIndex === questions.length - 1 ? 'けっかを見る →' : 'つぎの問題 →';
+      get('quiz-next').textContent = questionIndex === questions.length - 1 ? 'けっかを みる →' : 'つぎの もんだい →';
       const options = shuffle([letter, ...distractors]).map(option => {
         const button = document.createElement('button');
         button.type = 'button';
@@ -551,8 +551,8 @@
     function renderResult() {
       get('result-title').textContent = reviewing ? 'ふくしゅうのけっか' : 'クイズのけっか';
       get('score').textContent = questions.length - missed.length;
-      get('score-total').textContent = ` / ${questions.length} 問 せいかい`;
-      get('result-note').textContent = missed.length ? `まちがえた ${missed.length} 問にもう一度チャレンジ！` : 'ぜんぶ せいかい！';
+      get('score-total').textContent = ` / ${questions.length} もん せいかい`;
+      get('result-note').textContent = missed.length ? `まちがえた ${missed.length} もんを やりなおそう！` : 'ぜんぶ せいかい！';
       get('retry').hidden = missed.length === 0;
       show('result');
     }
