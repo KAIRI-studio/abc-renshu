@@ -395,6 +395,7 @@
     }
 
     function renderLetter() {
+      get('viewport').scrollTop = 0;
       const letter = pool[letterIndex];
       const characterIndex = alphabet.indexOf(letter);
       get('learn-mascot').src = learnCharacters[characterIndex];
@@ -566,7 +567,7 @@
       questionIndex += 1;
       if (questionIndex === questions.length) return renderResult();
       renderQuestion();
-      window.scrollTo(0, 0);
+      get('viewport').scrollTop = 0;
       prompt.focus({ preventScroll: true });
     });
     onAction('retry', () => {
