@@ -109,6 +109,8 @@
     .score-mascot { display: block; width: 100%; height: auto; }
     .result-note { color: var(--muted); font-size: 14px; font-weight: 650; text-align: center; margin-bottom: 14px; }
     #retry { margin-bottom: 10px; }
+    .credits { margin-top: 18px; text-align: center; font-size: 12px; }
+    .credits a { color: var(--muted); text-underline-offset: 3px; }
     @media (max-width: 560px) {
       .hero { grid-template-columns: minmax(0,1fr); gap: 4px; padding: 17px 15px 8px; text-align: center; }
       h1 b { margin-inline: auto; }
@@ -187,6 +189,7 @@
         <button id="result-home" class="btn wide" type="button">ホームにもどる</button>
       </section>
     </main>
+    <footer class="credits"><a href="audio-credits.html">音声の出典・利用条件</a></footer>
   </div>
   <script>
     'use strict';
@@ -196,12 +199,10 @@
       'ジェイ', 'ケイ', 'エル', 'エム', 'エヌ', 'オー', 'ピー', 'キュー', 'アール',
       'エス', 'ティー', 'ユー', 'ヴィー', 'ダブリュー', 'エックス', 'ワイ', 'ズィー'
     ];
-    const spokenNames = ["ay","bee","see","dee","ee","ef","gee","aitch","eye","jay","kay","el","em","en","oh","pee","cue","ar","ess","tee","you","vee","double you","ex","why","zee"];
     const alphabet = Array.from('ABCDEFGHIJKLMNOPQRSTUVWXYZ', (upper, index) => ({
       upper,
       lower: upper.toLowerCase(),
-      reading: readings[index],
-      spokenName: spokenNames[index]
+      reading: readings[index]
     }));
     const questionTypes = [
       { prompt: 'upper', answer: 'lower', instruction: '小文字をえらぼう' },
@@ -260,8 +261,7 @@
     ];
     const get = id => document.getElementById(id);
     const screens = ['home', 'learn', 'quiz', 'result'];
-    const speech = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window
-      ? window.speechSynthesis : null;
+    let activeAudio = null;
     const prompt = document.querySelector('.prompt');
     let pool = alphabet.slice(0, 5);
     let letterIndex = 0;
@@ -294,12 +294,17 @@
 
     function stopAudio() {
       speechRequest += 1;
-      speech?.cancel();
-      get('audio-note').hidden = Boolean(speech);
+      if (activeAudio) {
+        activeAudio.pause();
+        activeAudio.removeAttribute('src');
+        activeAudio.load();
+        activeAudio = null;
+      }
+      get('audio-note').hidden = true;
     }
 
     function showAudioNote() {
-      get('audio-note').textContent = 'この端末では音声を再生できません。';
+      get('audio-note').textContent = '音声を再生できませんでした。もう一度おしてね。';
       get('audio-note').hidden = false;
     }
 
@@ -313,8 +318,7 @@
       for (const key of ['upper', 'lower', 'reading']) get(key).textContent = letter[key];
       get('prev').disabled = letterIndex === 0;
       get('learn-next').textContent = letterIndex === pool.length - 1 ? 'おぼえるをおわる' : 'つぎ →';
-      get('speak').disabled = !speech;
-      if (!speech) showAudioNote();
+
     }
 
     function goHome() {
@@ -341,18 +345,21 @@
       renderLetter();
     });
     get('speak').addEventListener('click', () => {
-      if (!speech) return;
       stopAudio();
       const request = speechRequest;
+      const recording = new Audio(`assets/audio/${pool[letterIndex].upper}.mp3`);
+      activeAudio = recording;
+      const failed = () => {
+        if (request === speechRequest) showAudioNote();
+      };
+      recording.addEventListener('error', failed, { once: true });
+      recording.addEventListener('ended', () => {
+        if (activeAudio === recording) activeAudio = null;
+      }, { once: true });
       try {
-        const utterance = new SpeechSynthesisUtterance(pool[letterIndex].spokenName);
-        utterance.lang = 'en-US';
-        utterance.rate = 0.85;
-        utterance.voice = speech.getVoices().find(voice => /^en[-_]US$/i.test(voice.lang)) ?? null;
-        utterance.onerror = () => { if (request === speechRequest) showAudioNote(); };
-        speech.speak(utterance);
+        recording.play().catch(failed);
       } catch {
-        showAudioNote();
+        failed();
       }
     });
 
