@@ -149,9 +149,12 @@
           <fieldset>
             <legend>れんしゅうする文字</legend>
             <div class="ranges">
-              <label class="range"><input type="radio" name="range" value="5" checked><span><b>A〜E</b><small>5文字</small></span></label>
-              <label class="range"><input type="radio" name="range" value="13"><span><b>A〜M</b><small>13文字</small></span></label>
-              <label class="range"><input type="radio" name="range" value="26"><span><b>A〜Z</b><small>26文字</small></span></label>
+              <label class="range"><input type="radio" name="range" value="0-5" checked><span><b>A〜E</b><small>5文字</small></span></label>
+              <label class="range"><input type="radio" name="range" value="5-10"><span><b>F〜J</b><small>5文字</small></span></label>
+              <label class="range"><input type="radio" name="range" value="10-15"><span><b>K〜O</b><small>5文字</small></span></label>
+              <label class="range"><input type="radio" name="range" value="15-20"><span><b>P〜T</b><small>5文字</small></span></label>
+              <label class="range"><input type="radio" name="range" value="20-26"><span><b>U〜Z</b><small>6文字</small></span></label>
+              <label class="range"><input type="radio" name="range" value="0-26"><span><b>ぜんぶ</b><small>26文字</small></span></label>
             </div>
           </fieldset>
           <div class="row">
@@ -283,7 +286,8 @@
     }
 
     function selection() {
-      return alphabet.slice(0, Number(document.querySelector('input[name="range"]:checked').value));
+      const [start, end] = document.querySelector('input[name="range"]:checked').value.split('-').map(Number);
+      return alphabet.slice(start, end);
     }
 
     function progress(mode, index, total) {
@@ -320,8 +324,9 @@
 
     function renderLetter() {
       const letter = pool[letterIndex];
-      get('learn-mascot').src = learnCharacters[letterIndex];
-      const nextCharacter = learnCharacters[letterIndex + 1];
+      const characterIndex = alphabet.indexOf(letter);
+      get('learn-mascot').src = learnCharacters[characterIndex];
+      const nextCharacter = learnCharacters[characterIndex + 1];
       if (letterIndex + 1 < pool.length) document.createElement('img').src = nextCharacter;
       stopAudio();
       progress('learn', letterIndex, pool.length);
