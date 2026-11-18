@@ -196,10 +196,12 @@
       'ジェイ', 'ケイ', 'エル', 'エム', 'エヌ', 'オー', 'ピー', 'キュー', 'アール',
       'エス', 'ティー', 'ユー', 'ヴィー', 'ダブリュー', 'エックス', 'ワイ', 'ズィー'
     ];
+    const spokenNames = ["ay","bee","see","dee","ee","ef","gee","aitch","eye","jay","kay","el","em","en","oh","pee","cue","ar","ess","tee","you","vee","double you","ex","why","zee"];
     const alphabet = Array.from('ABCDEFGHIJKLMNOPQRSTUVWXYZ', (upper, index) => ({
       upper,
       lower: upper.toLowerCase(),
-      reading: readings[index]
+      reading: readings[index],
+      spokenName: spokenNames[index]
     }));
     const questionTypes = [
       { prompt: 'upper', answer: 'lower', instruction: '小文字をえらぼう' },
@@ -343,7 +345,7 @@
       stopAudio();
       const request = speechRequest;
       try {
-        const utterance = new SpeechSynthesisUtterance(pool[letterIndex].upper);
+        const utterance = new SpeechSynthesisUtterance(pool[letterIndex].spokenName);
         utterance.lang = 'en-US';
         utterance.rate = 0.85;
         utterance.voice = speech.getVoices().find(voice => /^en[-_]US$/i.test(voice.lang)) ?? null;
