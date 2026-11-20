@@ -158,6 +158,52 @@
       .shell { padding-top: 8px; padding-bottom: 14px; }
       .credits { margin-top: 12px; }
     }
+
+    /* The same paper, ink and accent colours carry through all four screens. */
+    .viewport { background-color: #f2f5f8; background-image: radial-gradient(#ccd6df 0.8px, transparent 0.9px); background-size: 16px 16px; }
+    .panel { background: #fffefa; border-color: #c9d6e3; box-shadow: 0 3px 0 #cbd8e3, 0 14px 36px -22px #25466580; }
+    .hero { background-color: #d6f0ff; background-image: repeating-linear-gradient(0deg, transparent 0 26px, #85b7d329 26px 27px); }
+    .top { column-gap: 8px; }
+    .effects-sound { position: relative; gap: 6px; font-size: 12px; white-space: nowrap; }
+    .effects-sound input { appearance: none; position: relative; width: 29px; height: 17px; margin: 0; background: #69768a; border: 1px solid transparent; border-radius: 12px; cursor: pointer; }
+    .effects-sound input::before { content: ''; position: absolute; left: 2px; top: 2px; width: 11px; height: 11px; border-radius: 50%; background: white; }
+    .effects-sound input:checked { background: var(--blue); }
+    .effects-sound input:checked::before { transform: translateX(12px); }
+    .top .btn { border-radius: 24px; background: #ffffffed; }
+    legend, h2 { letter-spacing: .025em; }
+    .range span { border-width: 1px; }
+    .range input:checked + span { background: #edf1ff; box-shadow: inset 0 0 0 1px var(--blue); }
+    .range input:checked + span::after { content: ''; position: absolute; right: 8px; top: 7px; width: 5px; height: 8px; border: solid var(--blue); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+    .range small { font-size: 12px; }
+    .mode { position: relative; padding-inline: 12px 23px; font-size: 18px; }
+    .mode::after { content: ''; position: absolute; right: 12px; top: 50%; width: 6px; height: 6px; border: solid currentColor; border-width: 2px 2px 0 0; transform: translateY(-50%) rotate(45deg); }
+    .mode small { opacity: .93; }
+    .progress-label { padding: 4px 10px; border-radius: 20px; background: #edf1ff; font-variant-numeric: tabular-nums; }
+    .card, .prompt { background: #f2f6ff; border-color: #cddbf0; border-radius: 18px; }
+    .card > div + div { border-color: #cddbf0; }
+    .reading { padding-top: 6px; border-top: 1px solid #d5dfee; }
+    .character::before { inset: 7%; }
+    .audio { background: #f8faff; color: #304b91; border-color: #cbd8f0; }
+    .option { border-width: 1px; box-shadow: 0 2px 0 #dae2ec; }
+    .option.correct, .option.wrong { border-width: 2px; box-shadow: none; }
+    .score { background: radial-gradient(ellipse at 80% 56%, #ffe18b 0 22%, transparent 23%), #fff4cd; border-color: #ecd89c; }
+    .credits a { text-decoration-color: #a1b0c2; }
+    @media (max-width: 560px) and (orientation: portrait) {
+      .hero { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 2px 5px; text-align: left; padding: 18px 15px; }
+      .hero h1 b { margin-inline: 0; font-size: clamp(43px, 12.5vw, 65px); }
+      .hero .cast { height: clamp(110px, 32vw, 162px); }
+      .intro { text-wrap: pretty; }
+    }
+    @media (max-width: 370px) {
+      .top { gap: 5px; }
+      .brand { font-size: 12px; gap: 5px; }
+      .brand-mark { width: 24px; height: 26px; }
+      .top .btn { padding-inline: 7px; }
+    }
+    @media (forced-colors: active) {
+      .effects-sound input { appearance: auto; }
+      .effects-sound input::before { display: none; }
+    }
   </style>
 </head>
 <body>
