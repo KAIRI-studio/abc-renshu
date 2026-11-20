@@ -95,6 +95,8 @@
     .card-mascot { grid-area: 1 / 3 / span 2; }
     .card-mascot::before { background: #ffedaa; }
     .audio { width: 100%; margin-bottom: 10px; }
+    .quiz-sound { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; cursor: pointer; font-size: 14px; font-weight: 700; }
+    .quiz-sound input { accent-color: var(--blue); }
     .audio-note { color: var(--muted); font-size: 12px; margin: 0 0 10px; text-align: center; }
     .prompt { display: grid; grid-template-columns: minmax(0,1fr) clamp(61px,20vw,108px); gap: 2px 6px; place-items: center; align-content: center; text-align: center; min-height: 105px; padding: 9px; background: var(--mist); border: 1px solid #d6e3fa; border-radius: 16px; font-weight: 800; font-size: 14px; margin-bottom: 10px; }
     .quiz-mascot { grid-area: 1 / 2 / span 2; }
@@ -206,7 +208,7 @@
         <div class="row"><button id="prev" class="btn" type="button">← まえ</button><button id="learn-next" class="btn primary" type="button">つぎ →</button></div>
       </section>
       <section id="quiz" class="inside" hidden>
-        <div class="head"><h2 id="quiz-title" tabindex="-1">クイズ</h2><span id="quiz-count" class="progress-label"></span></div>
+        <div class="head"><h2 id="quiz-title" tabindex="-1">クイズ</h2><label class="quiz-sound"><input id="quiz-sound" type="checkbox" checked>おと</label><span id="quiz-count" class="progress-label"></span></div>
         <progress id="quiz-progress" aria-label="クイズの すすみぐあい"></progress>
         <p class="prompt" tabindex="-1"><span id="question-instruction"></span><strong id="question-letter"></strong><span class="character quiz-mascot" aria-hidden="true"><img draggable="false" id="quiz-mascot" alt=""></span></p>
         <div id="options" class="options" role="group" aria-label="こたえを えらぶ"></div>
@@ -486,7 +488,23 @@
       return characters;
     }
 
+    const feedbackSounds = new Map();
+    function prepareFeedbackSounds() {
+      if (feedbackSounds.size) return;
+      for (const name of ['correct', 'wrong']) {
+        const sound = new Audio(`assets/audio/${name}.mp3`);
+        sound.preload = 'auto';
+        feedbackSounds.set(name, sound);
+      }
+    }
+
+    get('quiz-sound').addEventListener('change', () => {
+      if (get('quiz-sound').checked) prepareFeedbackSounds();
+      else stopAudio();
+    });
+
     function startRound(round, isReview) {
+      if (get('quiz-sound').checked) prepareFeedbackSounds();
       questions = round;
       reviewing = isReview;
       questionIndex = 0;
@@ -546,6 +564,12 @@
       get('feedback').classList.toggle('wrong', !correct);
       get('quiz-next').disabled = false;
       get('quiz-next').focus({ preventScroll: true });
+      if (get('quiz-sound').checked) {
+        const sound = feedbackSounds.get(correct ? 'correct' : 'wrong');
+        activeAudio = sound;
+        sound.currentTime = 0;
+        sound.play().catch(() => {});
+      }
     }
 
     function renderResult() {
@@ -565,6 +589,7 @@
     });
     onAction('quiz-next', () => {
       if (currentScreen !== 'quiz' || get('quiz-next').disabled) return;
+      stopAudio();
       questionIndex += 1;
       if (questionIndex === questions.length) return renderResult();
       renderQuestion();
