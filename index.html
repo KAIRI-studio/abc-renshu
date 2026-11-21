@@ -278,6 +278,7 @@
     <footer class="credits"><a href="audio-credits.html">おとの せつめい</a></footer>
   </div>
   </div></div>
+  <script defer src="/castor/analytics.js?v=family1" data-site="abc-renshu"></script>
   <script>
     'use strict';
 
@@ -586,6 +587,7 @@
       get('quiz-title').textContent = reviewing ? 'ふくしゅう' : 'クイズ';
       renderQuestion();
       show('quiz');
+      window.castorAnalytics?.event('game_start');
     }
 
     function renderQuestion() {
@@ -656,6 +658,7 @@
     }
 
     onNavigation('quiz-start', () => {
+      if (currentScreen !== 'home') return;
       pool = selection();
       unusedCharacters = shuffle(quizCharacters.filter(art => art !== lastQuizCharacter));
       if (lastQuizCharacter) unusedCharacters.push(lastQuizCharacter);
